@@ -22,24 +22,6 @@ class Tests_polynom(unittest.TestCase):
         self.assertEqual(str(context.exception),
                          "('Bad parameters in Polynomial constructor', 'a', ['a'])")
 
-    def test_ConstructorScalar(self):
-        p1 = Polynomial(5, 2, 1.0)
-        self.assertEqual(p1.coeffs, [5, 2, 1.0])
-        self.assertEqual(p1.degree, 2)
-        p2 = Polynomial(0)
-        self.assertEqual(p2.coeffs, [0])
-        self.assertEqual(p2.degree, 0)
-
-    def test_ConstructorScalarBad(self):
-        with self.assertRaises(Exception) as context:
-            p1 = Polynomial(4, [3, 2], 2, 'b')
-        self.assertEqual(str(context.exception),
-                         "('Bad parameters in Polynomial constructor', [3, 2], (4, [3, 2], 2, 'b'))")
-        with self.assertRaises(Exception) as context:
-            p2 = Polynomial('a')
-        self.assertEqual(str(context.exception),
-                         "('Bad parameters in Polynomial constructor', 'a', ('a',))")
-
     def test_ConstructorCopy(self):
         q = Polynomial([4, 3, 2, 1])
         p = Polynomial(q)
@@ -48,13 +30,13 @@ class Tests_polynom(unittest.TestCase):
 
     def test_ConstructorEmpty(self):
         p1 = Polynomial([])
-        self.assertEqual(p1.coeffs, [])
+        self.assertEqual(p1.coeffs, [0])
         self.assertEqual(p1.degree, 0)
         self.assertEqual(str(p1), '0')
-        p2 = Polynomial()
-        self.assertEqual(p2.coeffs, [])
-        self.assertEqual(p2.degree, 0)
-        self.assertEqual(str(p2), '0')
+        # p2 = Polynomial()
+        # self.assertEqual(p2.coeffs, [0])
+        # self.assertEqual(p2.degree, 0)
+        # self.assertEqual(str(p2), '0')
 
     # ============= trim tests =============
     def test_Trim(self):
@@ -80,16 +62,14 @@ class Tests_polynom(unittest.TestCase):
         p4 = Polynomial([2, 1])
         p5 = Polynomial([2])
         p6 = Polynomial([])
-        p7 = Polynomial()
 
-        self.assertEqual(str(p0), "X3+X2+X+1")
-        self.assertEqual(str(p1), "4X3+3X2+2X+1")
-        self.assertEqual(str(p2), "-4X3-3X2-2X-1")
-        self.assertEqual(str(p3), "-4X3+3.3X2+2X-1")
-        self.assertEqual(str(p4), "2X+1")
+        self.assertEqual(str(p0), "x^3+x^2+x+1")
+        self.assertEqual(str(p1), "4x^3+3x^2+2x+1")
+        self.assertEqual(str(p2), "-4x^3-3x^2-2x-1")
+        self.assertEqual(str(p3), "-4x^3+3.3x^2+2x-1")
+        self.assertEqual(str(p4), "2x+1")
         self.assertEqual(str(p5), "2")
         self.assertEqual(str(p6), "0")
-        self.assertEqual(str(p7), "0")
 
     def test_StrPlusWithNull(self):
         p1 = Polynomial([4, 3, 2, 0])
@@ -99,11 +79,11 @@ class Tests_polynom(unittest.TestCase):
         p5 = Polynomial([0, 3, 2, 0])
         p6 = Polynomial([0, 0, 0, 1])
 
-        self.assertEqual(str(p1), "4X3+3X2+2X")
-        self.assertEqual(str(p2), "4X3+3X2+1")
-        self.assertEqual(str(p3), "4X3+1")
-        self.assertEqual(str(p4), "4X3")
-        self.assertEqual(str(p5), "3X2+2X")
+        self.assertEqual(str(p1), "4x^3+3x^2+2x")
+        self.assertEqual(str(p2), "4x^3+3x^2+1")
+        self.assertEqual(str(p3), "4x^3+1")
+        self.assertEqual(str(p4), "4x^3")
+        self.assertEqual(str(p5), "3x^2+2x")
         self.assertEqual(str(p6), "1")
 
     def test_StrMinusWithNull(self):
@@ -114,11 +94,11 @@ class Tests_polynom(unittest.TestCase):
         p5 = Polynomial([0, -3, -2, 0])
         p6 = Polynomial([0, 0, 0, -1])
 
-        self.assertEqual(str(p1), "-4X3-3X2-2X")
-        self.assertEqual(str(p2), "-4X3-3X2-1")
-        self.assertEqual(str(p3), "-4X3-1")
-        self.assertEqual(str(p4), "-4X3")
-        self.assertEqual(str(p5), "-3X2-2X")
+        self.assertEqual(str(p1), "-4x^3-3x^2-2x")
+        self.assertEqual(str(p2), "-4x^3-3x^2-1")
+        self.assertEqual(str(p3), "-4x^3-1")
+        self.assertEqual(str(p4), "-4x^3")
+        self.assertEqual(str(p5), "-3x^2-2x")
         self.assertEqual(str(p6), "-1")
 
     # ============= equal tests =============
@@ -127,7 +107,7 @@ class Tests_polynom(unittest.TestCase):
         p1 = Polynomial([3, 2, 1])
         p2 = Polynomial([-3, -2, -1])
         p3 = Polynomial([-3, 2, -1])
-        p4 = "3X2+2X+1"
+        p4 = "3x2+2x+1"
         p5 = Polynomial(3)
         p6 = 3
 
@@ -135,7 +115,7 @@ class Tests_polynom(unittest.TestCase):
         self.assertTrue(p0 == p0)
         self.assertFalse(p0 == p2)
         self.assertFalse(p0 == p3)
-        self.assertTrue(p0 == p4)
+        self.assertFalse(p0 == p4)
         self.assertTrue(p5 == p6)
 
     def test_NotEqual(self):
@@ -143,7 +123,7 @@ class Tests_polynom(unittest.TestCase):
         p1 = Polynomial([3, 2, 1])
         p2 = Polynomial([-3, -2, -1])
         p3 = Polynomial([-3, 2, -1])
-        p4 = "3X2+2X+1"
+        p4 = "3x2+2x+1"
         p5 = Polynomial(3)
         p6 = 3
 
@@ -151,7 +131,7 @@ class Tests_polynom(unittest.TestCase):
         self.assertFalse(p0 != p0)
         self.assertTrue(p0 != p2)
         self.assertTrue(p0 != p3)
-        self.assertFalse(p0 != p4)
+        self.assertTrue(p0 != p4)
         self.assertFalse(p5 != p6)
 
     # ============= add tests =============
@@ -179,12 +159,12 @@ class Tests_polynom(unittest.TestCase):
 
     def test_AddBad(self):
         p0 = Polynomial([3, 2, 1])
-        p5 = "3X2+2X+1"
+        p5 = "3x2+2x+1"
 
         with self.assertRaises(Exception) as context:
             res = p0 + p5
         self.assertEqual(str(context.exception),
-                         "('Bad arg in Polynomial add function', '3X2+2X+1')")
+                         "('Bad arg in Polynomial add function', '3x2+2x+1')")
 
     def test_AddWithOneValue(self):
         p0 = Polynomial([3, 2, 1])
@@ -203,6 +183,17 @@ class Tests_polynom(unittest.TestCase):
 
         res = p8 + p7
         self.assertEqual(res.coeffs, [3])
+
+    def test_RaddBase(self):
+        p0 = Polynomial([3, 2, 1])
+        p1 = Polynomial([2, 1])
+        p2 = 1
+
+        res = p1 + p0
+        self.assertEqual(res.coeffs, [3, 4, 2])
+
+        res = p2 + p0
+        self.assertEqual(res.coeffs, [3, 2, 2])
 
     # ============= neg tests =============
     def test_Neg(self):
@@ -231,12 +222,23 @@ class Tests_polynom(unittest.TestCase):
 
     def test_SubBad(self):
         p0 = Polynomial([3, 2, 1])
-        p5 = "3X2+2X+1"
+        p5 = "3x2+2x+1"
 
         with self.assertRaises(Exception) as context:
             res = p0 - p5
         self.assertEqual(str(context.exception),
-                         "('Bad arg in Polynomial sub function', '3X2+2X+1')")
+                         "('Bad arg in Polynomial sub function', '3x2+2x+1')")
+
+    def test_RsubBase(self):
+        p0 = Polynomial([3, 2, 1])
+        p1 = Polynomial([2, 1])
+        p2 = 1
+
+        res = p1 - p0
+        self.assertEqual(res.coeffs, [-3, 0, 0])
+
+        res = p2 - p0
+        self.assertEqual(res.coeffs, [-3, -2, 0])
 
     # ============= mul tests =============
     def test_MulBase(self):
@@ -263,12 +265,12 @@ class Tests_polynom(unittest.TestCase):
 
     def test_MulBad(self):
         p0 = Polynomial([3, 2, 1])
-        p5 = "3X2+2X+1"
+        p5 = "3x2+2x+1"
 
         with self.assertRaises(Exception) as context:
             res = p0 * p5
         self.assertEqual(str(context.exception),
-                         "('Bad arg in Polynomial mul function', '3X2+2X+1')")
+                         "('Bad arg in Polynomial mul function', '3x2+2x+1')")
 
     def test_MulWithOneValue(self):
         p0 = Polynomial([3, 2, 1])
@@ -290,7 +292,14 @@ class Tests_polynom(unittest.TestCase):
         self.assertEqual(res.coeffs, [0])
 
         res = p9 * p8
-        self.assertEqual(res.coeffs, [])
+        self.assertEqual(res.coeffs, [0])
+
+    def test_RmulBase(self):
+        p1 = Polynomial([2, 1])
+        p2 = 2
+
+        res = p2 * p1
+        self.assertEqual(res.coeffs, [4, 2])
 
 
 if __name__ == '__main__':
